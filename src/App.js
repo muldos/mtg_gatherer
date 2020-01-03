@@ -1,24 +1,18 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './styles/components/App.css';
+import Header from './Header';
+import CardsContainer from './CardsContainer';
+import StarRating from './poc-components/StarRating';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="mtg">
+      <Header/>
+      <div>
+        <CardsContainer/>
+      </div>
+      <hr/>
+      <StarRating totalStars={6}/>
     </div>
   );
 }
