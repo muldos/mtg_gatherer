@@ -22,7 +22,9 @@ class CardsContainer extends Component {
                 loading: true
             }
         );
-        let apiUrl = "https://api.magicthegathering.io/v1/cards?name=garruk&language=french";
+        
+        const searchWord = 'garruk';
+        let apiUrl = `https://api.magicthegathering.io/v1/cards?name=${searchWord}&language=french`;
         fetch(apiUrl)
         .then(function(response) { return response.json(); })
         .then((data) => { 
