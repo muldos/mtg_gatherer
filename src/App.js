@@ -20,11 +20,9 @@ class App extends Component {
   }
 
   handleChange(event) {
-    console.log('change spotted');
     this.setState({searchVal: event.target.value});
   }
   handleSubmit(event) {
-    console.log('submit spotted');
     event.preventDefault();
     this.setState(
         {
@@ -32,14 +30,15 @@ class App extends Component {
         }
     );
 
-    const searchWord = this.state.searchVal;
-    let apiUrl = `https://api.magicthegathering.io/v1/cards?name=${searchWord}&language=french`;
+    const searchWord = encodeURI(this.state.searchVal);
+    let apiUrl = `https://api.scryfall.com/cards/search?order=rarity&q=${searchWord}`;
     fetch(apiUrl)
-        .then(function (response) { return response.json(); })
+        .then(function (response) {console.log('response ok'); return response.json(); })
         .then((data) => {
+          console.log(data);
             this.setState(
                 {
-                    cards: data.cards,
+                    cards: data.data || [],
                     loading: false
                 }
             );
@@ -49,10 +48,11 @@ class App extends Component {
 
 
   render() {
+
     let cards = this.state.cards.map((card) => {
-      if (card.cardImgUrl !== null && card.cardImgUrl !== '') {
+      if (card.image_uris !== null && card.image_uris !== undefined && card.image_uris.png !== null && card.image_uris.png !== '') {
         return (
-          <Col key={card.multiverseid}><Card key={card.multiverseid} cardImgUrl={card.imageUrl} /></Col>
+          <Col key={card.id}><Card key={card.id} cardImgUrl={card.image_uris.png} /></Col>
         );
       }
       else {
@@ -63,16 +63,16 @@ class App extends Component {
     if (cards == null || cards.length === 0) {
       cards = <Col ><Card /></Col>;
     }
+
     const mainContent = this.state.loading ? <Spinner animation="grow" /> : cards;
 
     return (
       <div className="mtg">
         <Header handleChange={this.handleChange} handleSubmit={this.handleSubmit} searchValue={this.state.searchVal}/>
         <div>
-          <CardsContainer content={mainContent}/>
+          <CardsContainer mainContent={mainContent}/>
         </div>
         <hr />
-        <StarRating totalStars={6} />
       </div>
     );
   }
