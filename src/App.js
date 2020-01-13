@@ -24,7 +24,6 @@ class App extends Component {
   }
 
   handleSuggestSelectionChange(value) {
-    console.log('on change for selection');
     this.setState({searchVal: value[0]});
   }
   handleInputChange(value) {
@@ -87,7 +86,7 @@ class App extends Component {
       cards = this.state.firstTime ? <Col ><Card /></Col> : <Col >No result found</Col>;
     }
 
-    const mainContent = this.state.loading ? <Spinner animation="grow" /> : cards;
+    const mainContent = this.state.loading ? <Spinner animation="border" /> : cards;
 
     return (
       <div className="mtg">
