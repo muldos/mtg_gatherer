@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './styles/components/App.css';
 import Header from './Header';
 import CardsContainer from './CardsContainer';
-import StarRating from './poc-components/StarRating';
 import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner';
 import Card from './Card';
@@ -13,15 +12,41 @@ class App extends Component {
     this.state = {
       cards: [],
       loading: false,
+      searchSuggestionIsLoading: false,
+      firstTime: true,
+      suggestions: [],
       searchVal: ''
     };
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleSuggestSelectionChange = this.handleSuggestSelectionChange.bind(this);
+    this.handleSearchSuggestion = this.handleSearchSuggestion.bind(this);
   }
 
-  handleChange(event) {
-    this.setState({searchVal: event.target.value});
+  handleSuggestSelectionChange(value) {
+    console.log('on change for selection');
+    this.setState({searchVal: value[0]});
   }
+  handleInputChange(value) {
+    this.setState({searchVal: value});
+  }
+  handleSearchSuggestion = (query) => {
+    this.setState({searchSuggestionIsLoading: true});
+
+    const searchWord = encodeURI(query);
+    let apiUrl = `https://api.scryfall.com/cards/autocomplete?q=${searchWord}`;
+    fetch(apiUrl)
+      .then(function (response) {return response.json();})
+      .then(({data,total_values }) => {
+          this.setState(
+              {
+                  searchSuggestionIsLoading: false,
+                  suggestions: data
+              }
+          );
+      });
+}
+
   handleSubmit(event) {
     event.preventDefault();
     this.setState(
@@ -33,19 +58,17 @@ class App extends Component {
     const searchWord = encodeURI(this.state.searchVal);
     let apiUrl = `https://api.scryfall.com/cards/search?order=rarity&q=${searchWord}`;
     fetch(apiUrl)
-        .then(function (response) {console.log('response ok'); return response.json(); })
+        .then(function (response) {return response.json();})
         .then((data) => {
-          console.log(data);
             this.setState(
                 {
                     cards: data.data || [],
-                    loading: false
+                    loading: false,
+                    firstTime: false
                 }
             );
         });
 }
-
-
 
   render() {
 
@@ -61,14 +84,22 @@ class App extends Component {
     });
 
     if (cards == null || cards.length === 0) {
-      cards = <Col ><Card /></Col>;
+      cards = this.state.firstTime ? <Col ><Card /></Col> : <Col >No result found</Col>;
     }
 
     const mainContent = this.state.loading ? <Spinner animation="grow" /> : cards;
 
     return (
       <div className="mtg">
-        <Header handleChange={this.handleChange} handleSubmit={this.handleSubmit} searchValue={this.state.searchVal}/>
+        <Header
+         handleInputChange={this.handleInputChange}
+         handleSubmit={this.handleSubmit} 
+         handleSuggestSelectionChange={this.handleSuggestSelectionChange}
+         handleSearchSuggestion={this.handleSearchSuggestion}
+         searchValue={this.state.searchVal}
+         suggestions={this.state.suggestions}
+         searchSuggestionIsLoading={this.state.searchSuggestionIsLoading}
+         />
         <div>
           <CardsContainer mainContent={mainContent}/>
         </div>

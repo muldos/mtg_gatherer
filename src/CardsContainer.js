@@ -5,7 +5,6 @@ import Row from 'react-bootstrap/Row';
 
 class CardsContainer extends Component {
     render() {
-  
         return (
             <Container>
                 <Row>
