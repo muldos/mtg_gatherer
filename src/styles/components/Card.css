@@ -1,0 +1,11 @@
+
+.card {
+    border: none;
+    padding: 3px;
+    margin: 3px;
+ }
+
+ .card .btn-group {
+     margin-top: 5px;
+     margin-left: -12px;
+ }

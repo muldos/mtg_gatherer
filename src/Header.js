@@ -33,7 +33,7 @@ class Header extends Component {
                                 <CardSuggestionItem key={idx} cardName={option} />
                             )}
                         />
-                        <Button type="submit" variant="outline-success">Search</Button>
+                        <Button type="submit" variant="dark">Search</Button>
                     </Form>
                 </Navbar.Collapse>
             </Navbar>

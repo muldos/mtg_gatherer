@@ -1,10 +1,24 @@
 import React, { Component } from 'react';
 import './styles/components/Card.css';
 import BootCard from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import defaultCardBack from './img/card-back.jpg';
-import { FaImage, FaBook } from "react-icons/fa";
-import { IconContext } from "react-icons";
+import { IoMdEye, IoMdSchool, IoIosShare } from "react-icons/io";
+
 class Card extends Component {
+
+    constructor(){
+        super();
+        this.state= {
+        };
+        this.handleClickDetails = this.handleClickDetails.bind(this);
+        this.handleClickRuling = this.handleClickRuling.bind(this);
+        this.handleClickSharing = this.handleClickSharing.bind(this);
+    }
+    handleClickDetails(event){}
+    handleClickRuling(event){ }
+    handleClickSharing(event){}
     /**
      * props constraints and default values
      */
@@ -18,7 +32,6 @@ class Card extends Component {
                     return null;
                 }
                 else {
-
                     new Error("invalid url");
                 }
             }
@@ -35,14 +48,13 @@ class Card extends Component {
     render() {
         const { cardImgUrl } = this.props;
         return (
-
             <BootCard style={{ width: '14rem' }}>
                 <BootCard.Img fluid="true" src={cardImgUrl} />
-                <BootCard.Text>
-                    <IconContext.Provider value={{ color: "#404040", size: "1.5em" }}>
-                        <FaImage /> <FaBook />
-                    </IconContext.Provider>
-                </BootCard.Text>
+                    <ButtonGroup>
+                        <Button variant="light"><IoMdEye onClick={this.handleClickDetails}/>Details</Button>
+                        <Button variant="light"> <IoMdSchool  onClick={this.handleClickRuling}/>Rules</Button>
+                        <Button variant="light"><IoIosShare onClick={this.handleClickSharing}/>Share</Button>
+                    </ButtonGroup>
             </BootCard>);
     }
 }
